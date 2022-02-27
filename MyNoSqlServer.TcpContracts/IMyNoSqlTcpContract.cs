@@ -174,4 +174,24 @@ namespace MyNoSqlServer.TcpContracts
             
         }
     }
+
+
+    public class ErrorTcpContract : IMyNoSqlTcpContract
+    {
+        public byte Version { get; set; }
+        public string Message { get; set; }
+
+        public void Serialize(Stream stream)
+        {
+            //Now we support only version 0
+            stream.WriteByte(Version);
+            stream.WritePascalString(Message);
+        }
+
+        public async ValueTask DeserializeAsync(ITcpDataReader dataReader, CancellationToken ct)
+        {
+            Version = await dataReader.ReadByteAsync(ct);
+            Message = await dataReader.ReadPascalStringAsync(ct);
+        }
+    }
 }

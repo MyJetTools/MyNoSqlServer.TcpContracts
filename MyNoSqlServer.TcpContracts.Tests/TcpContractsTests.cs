@@ -91,6 +91,35 @@ namespace MyNoSqlServer.TcpContracts.Tests
 
             Assert.AreEqual(testContract.Name, result.Name);
         }
+        
+        
+        [Test]
+        public async Task TestErrorTcpContract()
+        {
+
+            var serializer = new MyNoSqlTcpSerializer();
+
+
+            var testContract = new ErrorTcpContract
+            {
+                Message = "Test"
+            };
+
+            var incomingTraffic = new IncomingTcpTrafficMock();
+
+            var dataReader = new TcpDataReader(incomingTraffic, ReadBufferSize);
+            
+            var rawData = serializer.Serialize(testContract);
+
+            incomingTraffic.NewPackageAsync(rawData);
+
+            var result
+                = (ErrorTcpContract)
+                await serializer
+                    .DeserializeAsync(dataReader, CancellationToken.None);
+
+            Assert.AreEqual(testContract.Message, result.Message);
+        }
 
 
         [Test]

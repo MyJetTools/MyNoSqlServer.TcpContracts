@@ -15,7 +15,8 @@ namespace MyNoSqlServer.TcpContracts
                 [CommandType.InitTable] =     () => new InitTableContract(),
                 [CommandType.InitPartition] = () => new InitPartitionContract(),
                 [CommandType.UpdateRows] =    () => new UpdateRowsContract(),
-                [CommandType.DeleteRow] =     () => new DeleteRowsContract()
+                [CommandType.DeleteRow] =     () => new DeleteRowsContract(),
+                [CommandType.Error] =     () => new ErrorTcpContract(),
             };
 
         private static readonly Dictionary<Type, CommandType> TypeToCommandType =
